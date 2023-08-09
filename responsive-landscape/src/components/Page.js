@@ -5,7 +5,7 @@ import Chat from "./Chat";
 export default function Page() {
   return (
     <div className="page-wrapper">
-      <Player playerWith={"70%"} />
+      <Player />
       <Chat />
     </div>
   );
