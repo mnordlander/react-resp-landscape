@@ -1,51 +1,61 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import "./index.css";
 import Player from './components/Player';
 import Chat from './components/Chat';
 
 function App() {
-  const [mobileLandscape, setMobileLandscape] = useState(false)
-  const [dimensions, setDimensions] = useState({
-    height: window.innerHeight,
-    width: window.innerWidth,
-  })
+  const [isMobileLandscape, setIsMobileLandscape] = useState(false);
+  const playerWrapperRef = useRef(null);
 
-  function isMobileDevice() {
-    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-  }
+  const handleOrientationChange = () => {
+    setIsMobileLandscape(
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) &&
+      window.innerWidth > window.innerHeight
+    );
+  };
 
   useEffect(() => {
-    function handleResize() {
-      const newDimensions = {
-        height: window.innerHeight,
-        width: window.innerWidth
-      };
-      setDimensions(newDimensions);
 
-      setMobileLandscape(newDimensions.width > newDimensions.height);
 
-    }
+    handleOrientationChange();
 
-    window.addEventListener('resize', handleResize)
-
+    window.addEventListener('resize', handleOrientationChange);
 
     return () => {
-      window.removeEventListener('resize', handleResize)
+      // Clean up event listener on component unmount
+      window.removeEventListener('resize', handleOrientationChange);
+    };
+  }, []);
+
+  const adjustPlayerWrapperDimensions = () => {
+    if (playerWrapperRef.current) {
+      const screenWidth = window.innerWidth;
+      const screenHeight = window.innerHeight;
+      const aspectRatio = 16 / 9;
+      const newWidth = Math.min(screenWidth, screenHeight * aspectRatio);
+      playerWrapperRef.current.style.width = newWidth + 'px';
     }
-  }, [])
+  };
+
+  useEffect(() => {
+    adjustPlayerWrapperDimensions();
+
+    window.addEventListener('resize', adjustPlayerWrapperDimensions);
+
+    return () => {
+      // Clean up event listener on component unmount
+      window.removeEventListener('resize', adjustPlayerWrapperDimensions);
+    };
+  }, []);
 
   return (
     <div className="wrapper">
-      {isMobileDevice && mobileLandscape ? (
-        <Player string={<p>Mobile is in landscape mode</p>} width={dimensions.width} height={dimensions.height} />
-      ) : (
-        <>
-          <Player string={<p>Mobile is not in landscape mode</p>} width={dimensions.width} height={dimensions.height} />
-          <Chat />
-        </>
-      )}
+      <div ref={playerWrapperRef} className="player-wrapper">
+        <Player />
+      </div>
+      {isMobileLandscape ? null : <Chat />}
     </div>
   );
-}
+};
 
 export default App;
