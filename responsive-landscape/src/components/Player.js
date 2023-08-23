@@ -1,4 +1,6 @@
-export default function Player({ width, height }) {
+export default function Player() {
 
-  return <div className="player-wrapper"><p>width :{width} Height: {height}</p></div>;
+  return (
+    <pages-player style={{ display: 'block' }} className="tecviz-js"></pages-player>
+  )
 }
