@@ -4,7 +4,7 @@ import Chat from "./Chat";
 
 export default function Page() {
   return (
-    <div className="page-wrapper">
+    <div className="wrapper">
       <Player />
       <Chat />
     </div>
