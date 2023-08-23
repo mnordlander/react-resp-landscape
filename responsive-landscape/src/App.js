@@ -14,8 +14,6 @@ function App() {
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
   }
 
-  console.log(isMobileDevice());
-
   useEffect(() => {
     function handleResize() {
       const newDimensions = {
@@ -38,9 +36,14 @@ function App() {
 
   return (
     <div className="wrapper">
-      <Player width={dimensions.width} height={dimensions.height} />
-      <Chat />
-      {mobileLandscape ? <p>Mobile is in landscape mode</p> : <p>Mobile is not in landscape mode</p>}
+      {isMobileDevice && mobileLandscape ? (
+        <Player string={<p>Mobile is in landscape mode</p>} width={dimensions.width} height={dimensions.height} />
+      ) : (
+        <>
+          <Player string={<p>Mobile is not in landscape mode</p>} width={dimensions.width} height={dimensions.height} />
+          <Chat />
+        </>
+      )}
     </div>
   );
 }
