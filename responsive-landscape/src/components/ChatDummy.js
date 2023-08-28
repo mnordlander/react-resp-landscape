@@ -1,4 +1,4 @@
-export default function Chat() {
+export default function ChatDummy() {
     return (
         <div className="chat"></div>
     )

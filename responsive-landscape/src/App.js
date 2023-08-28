@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import "./index.css";
-import Player from './components/Player';
-import Chat from './components/Chat';
+import PlayerDummy from './components/PlayerDummy';
+import ChatDummy from "./components/ChatDummy";
 
 function App() {
   const [isMobileLandscape, setIsMobileLandscape] = useState(false);
@@ -51,9 +51,9 @@ function App() {
   return (
     <div className="wrapper">
       <div ref={playerWrapperRef} className="player-wrapper">
-        <Player />
+        <PlayerDummy />
       </div>
-      {isMobileLandscape ? null : <Chat />}
+      {isMobileLandscape ? null : <ChatDummy />}
     </div>
   );
 };
